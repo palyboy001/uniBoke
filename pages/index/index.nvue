@@ -1,0 +1,441 @@
+<template>
+	<view class="content" :style="{'--screenWidth':contenStyle.width+'px','--screenHeight':contenStyle.height}">
+		<!-- 手机状态栏 -->
+		<statusBar></statusBar>
+		<view class="top" ref="tope">
+			<view class="address" @click="navigateToTest()">
+				<text class="addressText textHua firstColor-font" >河池学院</text>
+			</view>
+			<view class="searchBox"  >
+				<view class="bgBorder" >
+					<view 
+						class="inputKey"
+						@click="getFocus()"
+						>
+							<text class="textHua firstColor-font">请输入需要搜索的内容</text>
+							<text class="searchIcon iconfont">&#xe654;</text>
+						</view>
+				</view>
+			</view>
+		</view>
+		
+		<!-- 轮播图 -->
+		<view class="swipeImage" ref="swipeImage">
+			<swipe :width="getSwipeWidth()"></swipe>
+		</view>
+
+		<!-- 内容区域 -->
+		<view class="contenTopic" :style="{'min-height':height+'px'}">
+			<view class="topNav">
+				<view class="viewNav" @click="swipeIndex = 0">
+					<text :class="[swipeIndex===0?'select':'textNav','textHua']">推荐</text>
+					<view class="boxNav" v-if="swipeIndex===0"></view>
+				</view>
+				<view class="viewNav" @click="swipeIndex = 1">
+					<text :class="[swipeIndex===1?'select':'textNav','textHua']">热门</text>
+					<view class="boxNav" v-if="swipeIndex===1"></view>
+				</view>
+				<view class="viewNav" @click="swipeIndex = 2">
+					<text :class="[swipeIndex===2?'select':'textNav','textHua']">国家级考试通知</text>
+					<view class="boxNav" v-if="swipeIndex===2"></view>
+				</view>
+			</view>
+			<view class="topic">
+				<swiper 
+					:current="swipeIndex"
+					@change="getSwipeIndex"
+					:style="{'height':swipeHeigh + 'px'}"
+				>
+					<swiper-item >
+						<view class="swiper-item">
+							<list>
+								<cell v-for="(item,index) in user" :key="index">
+									<topic 
+										ref="topicTest" 
+										:user="item"
+										@click.native="navigateToTopic()"
+									></topic>
+								</cell>
+							</list>
+						</view>
+					</swiper-item>
+					<swiper-item >
+						<view class="swiper-item">
+							<list>
+								<cell v-for="(item,index) in user" :key="index">
+									<topic ref="hotTopic" :user="item"></topic>
+								</cell>
+							</list>
+						</view>
+					</swiper-item>
+					<swiper-item>
+						<view class="swiper-item">
+							<list>
+								<cell v-for="(item,index) in user" :key="index">
+									<topic ref="examination" :user="item"></topic>
+								</cell>
+							</list>
+						</view>
+					</swiper-item>
+				</swiper>
+			</view>
+		</view>
+		<!-- 发布话题 -->
+		<view class="sendTopicBox" @click="navigateToSend()">
+			<text class="sendText iconfont">&#xe604;</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+	import swipe from '@/components/swipe.nvue'
+	import topic from '@/components/topic.nvue'
+	import statusBar from '@/components/statusBar.nvue'
+	
+	export default {
+		data() {
+			return {
+				contenStyle:{
+					width:getApp().globalData.screenWidth,//整个屏幕的宽高
+					height:getApp().globalData.screenHeight
+				},
+				statusBarHeight:getApp().globalData.statusBarHeight,//顶部状态高度
+				index:0,
+				height:0,//内容区域最低高度
+				swipeHeigh:0,//滑动内容区域高度
+				swipeIndex:0,//滑动下标
+				user:[
+					{
+						nickname:"腿毛小勇士",
+						sendTime:"18小时前",
+						userImage:"/static/swipeImage/1.jpg",
+						topic:{
+							text:"各种文案....",
+							image:[
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg"
+							],
+							zan:1024,
+							commentCount:1024
+						}
+					},
+					{
+						nickname:"腿毛小勇士",
+						sendTime:"18小时前",
+						userImage:"/static/swipeImage/1.jpg",
+						topic:{
+							text:"各种文案....",
+							image:[
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg"
+							],
+							zan:1024,
+							commentCount:1024
+						}
+					},
+					// {
+					// 	nickname:"腿毛小勇士",
+					// 	sendTime:"18小时前",
+					// 	userImage:"/static/swipeImage/1.jpg",
+					// 	topic:{
+					// 		text:"各种文案....",
+					// 		image:[
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg",
+					// 			"/static/swipeImage/2.jpg"
+					// 		],
+					// 		zan:1024,
+					// 		commentCount:1024
+					// 	}
+					// }
+				]
+			}
+		},
+		methods: {
+			...mapMutations(['setHeightAndWidth']),
+			//跳转页面
+			getFocus(){
+				uni.navigateTo({
+					url:"../search/search"
+				})
+			},
+			
+			//跳转至话题详细页
+			navigateToTopic(){
+				console.log("ddd")
+				uni.navigateTo({
+					url:"../topicInformation/topicInformation"
+				})
+			},
+			//跳转至发送话题页面
+			navigateToSend(){
+				uni.navigateTo({
+					url:"/pages/sendTopic/sendTopic"
+				})
+			},
+			
+			//计算轮播图区域大小( 取屏幕的90%宽度 )
+			/**
+			 * imageBox:是否获取轮播图的轮播框长度
+			 * */
+			getSwipeWidth(imageBox){
+				let width = this.contenStyle.width * 0.95;
+				if(imageBox){
+					return width*4 + 'px'
+				}
+				// console.log(width)
+				return width + 'px';
+			},
+			
+			// 点击轮播图片跳转
+			navigateTo(){
+				uni.navigateTo({
+					url:"../search/search"
+				})
+			},
+			
+			// 计算话题内容的最低高度
+			calculateContentHeight(){
+				let top = JSON.parse(JSON.stringify(this.$refs.tope))
+				let swipeImage = JSON.parse(JSON.stringify(this.$refs.swipeImage))
+				let  topHeight = parseInt(top.style.height) + parseInt(top.style.marginTop)
+				let height = getApp().globalData.screenHeight - (topHeight + parseInt(swipeImage.style.height) + this.statusBarHeight + 50)
+				this.height = height
+				// this.swipeHeigh = height
+				console.log(height)
+			},
+			
+			//计算内容滑动区域的高度
+			calculateSlideContentHeight(){
+				// 获取元素宽高
+				// #ifdef APP-NVUE
+				let topic = this.$refs.topicTest;
+				// let height = 0;
+				// let new_height = 0;
+				// 如果话题数量大于1条,就会重置滑动窗口的高度
+				if(topic.length <= 1){
+					this.swipeHeigh = this.height
+					return
+				}
+				//如果不是异步获取，会获取到父级宽高
+				setTimeout(() =>{
+					const dom = weex.requireModule('dom');
+					for(let i = 0;i<topic.length;i++){
+						// dom.getComponentRect(‘传入一个ref的dom’，回调函数option={resutl:true,size:{}})
+						const result = dom.getComponentRect(this.$refs.topicTest[i], option => {
+							this.swipeHeigh = this.swipeHeigh + option.size.height
+							// console.log( option.size.height)
+						})
+					}
+				},100)
+				// #endif
+			},
+			
+			// 获取滑动区域的下标
+			getSwipeIndex(event){
+				this.swipeIndex = event.detail.current
+				console.log(event.detail.current)
+			},
+			
+			//修改store中的屏幕宽高
+			setStoreData(width,height){
+				this.setHeightAndWidth(width,height)
+			}
+			
+		},
+		components:{
+			swipe,
+			topic,
+			statusBar
+		},
+		mounted() {
+			this.calculateContentHeight()
+			this.calculateSlideContentHeight()
+			console.log(this.swipeHeigh)
+		},
+		updated() {
+			
+		},
+		//监听页面初次渲染完成。注意如果渲染速度快，会在页面进入动画完成前触发
+		onReady() {
+			this.setStoreData({
+				width:this.contenStyle.width,
+				height:this.contenStyle.height
+			})
+		},
+		computed:{
+			...mapState(['text'])
+		}
+	}
+</script>
+
+<style scoped>
+	/* 整个内容 */
+	.content{
+		display: flex;
+		background-color: #FFFFFF;
+		/* position: relative; */
+	}
+	
+	/* 导航栏选中效果 */
+	.select{
+		margin-top: 5rpx;
+		font-size: 30rpx;
+		color: black;
+	}
+	/* 顶部 */
+	.content .top {
+		display: flex;
+		height: 80rpx;
+		margin-top: 10rpx;
+		/* background-color: red; */
+		flex-direction: row;
+	}
+	/* 顶部地址 */
+	.content .top .address .addressText{
+		/* font-family: myIconfont; */
+		font-size: 35rpx;
+		text-align: center;
+		width: 180rpx;
+		/* background-color: #838fff; */
+		line-height: 80rpx;
+		
+	}
+	/* 顶部搜索框 */
+	.content .top .searchBox{
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		margin-right: 20rpx;
+		align-items: flex-end;
+		/* background-color: #b8ffb3; */
+	}
+	.content .top .searchBox .bgBorder{
+		width: 400rpx;
+		height: 60rpx;
+		display: flex;
+		justify-content: center;
+		border-width: 2rpx;
+		border-color: #4C8045;
+		border-radius: 50rpx;
+		padding-left: 20rpx;
+		
+	}
+	.content .top .searchBox .bgBorder .inputKey{
+		display: flex;
+		flex-direction: row;
+		font-size: 25rpx;
+	}
+	/* 搜索图标 */
+	.content .top .searchBox .bgBorder .inputKey .searchIcon{
+		color: #4C8045;
+		font-size: 30rpx;
+		margin-left: 80rpx;
+		/* #ifdef APP-PLUS */
+		margin-left: 100rpx;
+		/* #endif */
+	}
+	
+	/* 轮播图 */
+	.content .swipeImage{
+		display: flex;
+		justify-content:center;
+		align-items: center;
+		height: 350rpx;
+	}
+	
+	/* 内容区域 */
+	/* 导航栏区域 */
+	.content .contenTopic{
+		/* display: flex; */
+		padding: 0 20rpx;
+		border-top-left-radius: 30rpx;
+		border-width: 2rpx;
+		border-color: #dbb7ff;
+		border-width: 2rpx;
+		flex: 1;
+		/* min-height: 800rpx; */
+	}
+	
+	.content .contenTopic .topNav{
+		display: flex;
+		height: 60rpx;
+		/* align-items: center; */
+		flex-direction: row;
+		
+	}
+	.content .contenTopic .topNav .viewNav{
+		margin: 0 10rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	/* 导航栏文字(未选中效果) */
+	.content .contenTopic .topNav .viewNav .textNav{
+		font-size: 25rpx;
+		color: #898989;
+	}
+	/* 文字下方的横条 */
+	.content .contenTopic .topNav .viewNav .boxNav{
+		width: 40rpx;
+		height: 5rpx;
+		margin-top: 2rpx;
+		margin-left: 8rpx;
+		border-radius: 10rpx;
+		border-color: red;
+		background-color: red;
+	}
+	
+	.content .contenTopic .topic{
+		display: flex;
+	}
+	
+	/* 话题内容区域 */
+	.content .contenTopic .topic .swiper-item{
+		margin: 10rpx;
+	}
+	
+	.content .contenTopic .topic .swipe{
+		display: flex;
+		flex: 1;
+	}
+	/* 发布话题 */
+	.content .sendTopicBox{
+		position: fixed;
+		align-items: center;
+		justify-content: center;
+		width: 88rpx;
+		height: 88rpx;
+		bottom: 70rpx;
+		right: 70rpx;
+		border-radius: 120rpx;
+		background-color: #FFFFFF;
+	}
+	.content .sendTopicBox .sendText{
+		margin-top: -1rpx;
+		margin-left: -7rpx;
+		font-size: 100rpx;
+		color: #4C8045;
+	}
+</style>

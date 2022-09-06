@@ -1,0 +1,49 @@
+<template>
+	<view class="content">
+		<statusBar :color="backgroundColor"></statusBar>
+		<uni-nav-bar 
+			title="消息"
+			:backgroundColor="backgroundColor"
+			:color="color"
+			rightIcon="staff-filled"
+		></uni-nav-bar>
+		<view class="messageBox">
+			<messageWindow v-for="(item,index) in message" @click.native="navigateTo()"></messageWindow>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from '@/components/statusBar.nvue'
+	import messageWindow from '@/components/messageWindow.nvue'
+	import {mapState} from 'vuex'
+	export default {
+		data() {
+			return {
+				message:[
+					{},
+					{}
+				]
+			}
+		},
+		methods: {
+			navigateTo(){
+				console.log(2222)
+				uni.navigateTo({
+					url:"/pages/chat/chat"
+				})
+			}
+		},
+		components:{
+			statusBar,
+			messageWindow
+		},
+		computed:{
+			...mapState(['backgroundColor','color'])
+		}
+	}
+</script>
+
+<style scoped>
+
+</style>

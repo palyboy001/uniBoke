@@ -1,0 +1,184 @@
+<template>
+	<view class="content" >
+		<!-- 顶部头像、昵称区域 -->
+		<view class="top">
+			<view class="topBox">
+				<view class="infoImage">
+					<image class="image" :src="user.userImage" mode="aspectFit"></image>
+				</view>
+				<view class="nickNameBox">
+					<text class="nickName textHua">{{user.nickname}}</text>
+					<text class="time textHua">{{user.sendTime}}</text>
+				</view>
+				<view class="more" @click.native="clickMore()">
+					<image class="moreImage" src="/static/more.png" mode=""></image>
+				</view>
+			</view>
+		</view>
+		<!-- 中间文案区域 -->
+		<view class="min">
+			<text class="topicContentText textHua">{{user.topic.text}}</text>
+		</view>
+		<!-- 图片区域 -->
+		<view class="bottom" :style="{'width':screenWidth}">
+			<image 
+				v-for="(item,index) in user.topic.image"
+				:key="index"
+				:class="[user.topic.image.length===1?'':'imageIcon']" 
+				style="border-radius: 30rpx" 
+				:src="item" 
+				mode="aspectFill"
+			></image>
+		</view>
+		
+		<!-- 点赞、分享、评论标记区域 -->
+		<view class="commentBox">
+			<view class="zan">
+				<image class="icon" src="/static/zan.png" mode="widthFix"></image>
+				<text class="iconText textHua">1024</text>
+			</view>
+			<view class="comment">
+				<image class="icon" src="/static/comment.png" mode="widthFix"></image>
+				<text class="iconText textHua">1024</text>
+			</view>
+			<!-- 分享 -->
+			<view class="share">
+				<image class="icon" src="/static/share.png" mode="widthFix"></image>
+				<text class="iconText textHua" style="font-size: 25rpx;">分享</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"topic",
+		props:['user'],
+		data() {
+			return {
+				screenWidth:getApp().globalData.screenWidth,
+				imageCount:0,//统计九宫格的图片数量
+				height:0,//话题高度
+			};
+		},
+		methods:{
+			// 点击弹出更多
+			clickMore(){
+				console.log("弹出更多")
+			},
+			
+			//跳转至话题详细页
+			navigateToTopic(){
+				console.log("ddd")
+				uni.navigateTo({
+					url:"/pages/topicInformation/topicInformation"
+				})
+			},
+		}
+	}
+</script>
+
+<style scoped>
+	/* 整个内容 */
+	.content{
+		display: flex;
+		padding: 20rpx 0;
+		/* background-color: aqua; */
+	}
+	
+	/* 顶部样式 */
+	.content .top{
+		margin-bottom: 10rpx;
+	}
+	.content .top .topBox{
+		display: flex;
+		/* margin-bottom: 10rpx; */
+		flex-direction: row;
+	}
+	
+	.content .top .topBox .infoImage{
+		width: 80rpx;
+		height: 80rpx;
+		margin-right: 20rpx;
+	}
+	/* 头像样式 */
+	.content .top .topBox .infoImage .image{
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 80rpx;
+	}
+	/* 昵称中间的盒子 */
+	.content .top .topBox .nickNameBox{
+		flex: 1;
+		margin: 8rpx;
+	}
+	/* 昵称 */
+	.content .top .topBox .nickNameBox .nickName{
+		font-size:30rpx;
+	}
+	/* 时间 */
+	.content .top .topBox .nickNameBox .time{
+		font-size: 20rpx;
+	}
+	/* 三个点样式 */
+	.content .top .topBox .more{
+		display: flex;
+		justify-content: center;
+	}
+	/* 三个点样式图片 */
+	.content .top .topBox .more .moreImage{
+		width: 38rpx;
+		height: 8rpx;
+	}
+	
+	/* 中间文字内容区域 */
+	.content .min{
+		margin: 10rpx 0;
+	}
+	.content .min .topicContentText{
+		font-size: 25rpx;
+	}
+	/* 图片九宫格区域 */
+	.content .bottom{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	
+	.content .bottom .imageIcon{
+		width: 210rpx;
+		height: 210rpx;
+		margin: 5rpx;
+		border-radius: 30rpx;
+	}
+	
+	/* 九宫格自适应 */
+	/* .content .bottom>image:only-child{
+		width: 300rpx;
+	} */
+	
+	/* 下方图标区域 */
+	.content .commentBox{
+		margin-top: 25rpx;
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+	}
+	
+	.content .commentBox .zan,.comment,.share{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	.content .commentBox .icon{
+		width: 30rpx;
+	}
+	
+	.content .commentBox .iconText{
+		margin-left: 5rpx;
+		font-size: 25rpx;
+		color: #CDCDCD;
+	}
+	
+</style>

@@ -1,0 +1,242 @@
+<template>
+	<view class="container" :style="{'height':height}">
+		<!-- <statusBar></statusBar> -->
+		<view class="navBox">
+			<text class="backBotton iconfont" @click="back()">&#xe662;</text>
+		</view>
+		<!-- 顶部标题 -->
+		<view class="titleBox">
+			<view class="title">
+				<text class="singIn">SING IN</text>
+				<text class="titleText textHanYing">欢迎登录</text>
+			</view>
+		</view>
+		<!-- 中间输入框 -->
+		<view class="contentBox">
+			<!-- 账号输入框 -->
+			<view class="userBox rowBox">
+				<text class="icon iconfont">&#xe8c8;</text>
+				<input 
+					class="userInput textHua" 
+					type="text" 
+					placeholder-class="input" 
+					placeholder="请输入账号/账号"
+					v-model="userInput"
+					confirm-type="next"
+				>
+			</view>
+			<!-- 密码输入框 -->
+			<view class="passwordBox rowBox">
+				<text class="icon iconfont">&#xe8b2;</text>
+				<input 
+					class="passwordInput textHua" 
+					type="text" 
+					placeholder-class="input" 
+					placeholder="请输入密码"
+					v-model="password"
+					confirm-type="done"
+				>
+			</view>
+			<!-- 登录按钮 -->
+			<view class="loginBox" hover-class="clickLogin" hover-stay-time="30">
+				<input 
+					disabled="true" 
+					class="loginInput textHua" 
+					type="text" 
+					placeholder-class="login" 
+					placeholder="登录"
+				>
+			</view>
+			<!-- 注册\忘记密码 -->
+			<view class="registerBox rowBox">
+				<text class="register textHua">注册</text>
+				<text class="lostPassword textHua">忘记密码？</text>
+			</view>
+		</view>
+		<!-- 底部另外授权 -->
+		<view class="extraBox">
+			<!-- 隐私文字 -->
+			<view class="extraTextBox rowBox" @click="extra=!extra">
+				<text :class="[extra?'agreeService':'']" class="extraText textHua extraIcon iconfont">{{extra?'&#xe8ad;':'&#xe8bb;'}}</text>
+				<text class="extraText textHua fixedText">授权即同意</text>
+				<text class="extraText textHua service" @click="ServicePrivacy()">服务协议</text>
+			</view>
+			<!-- 外部账号授权 -->
+			<view class="externalLinkBox rowBox">
+				<image class="linkImage" src="/static/QQ.png" mode="aspectFill"></image>
+				<image class="linkImage" src="/static/wechat.png" mode="aspectFill"></image>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from '@/components/statusBar.nvue'
+	export default {
+		data() {
+			return {
+				height:getApp().globalData.screenHeight,
+				userInput:"",//账号
+				password:"",//密码
+				extra:false,//是否同意服务隐私
+			}
+		},
+		methods: {
+			/* 跳转到服务与隐私页面 */
+			ServicePrivacy(){
+				uni.navigateTo({
+					url:"/pages/chat/chat"
+				})
+			},
+			
+			/* 返回页面 */
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			}
+		},
+		components:{
+			statusBar
+		}
+	}
+</script>
+
+<style scoped>
+	/* 横排显示 */
+	.rowBox{
+		flex-direction: row;
+	}
+	/* 按下登录按钮样式 */
+	.clickLogin{
+		background-color: #34582f;
+	}
+	/* 同意服务样式 */
+	.agreeService{
+		color: #45A2FF;
+	}
+	/* 登录按钮,默认样式 */
+	.login{
+		color: #FFFFFF;
+		text-align: center;
+	}
+	/* 账号密码框,默认样式 */
+	.input{
+		color: #4C8045;
+		font-size: 20rpx;
+	}
+	/* 输入框的图标 */
+	.icon{
+		color: #4C8045;
+	}
+	/* 全部内容样式 */
+	.container{
+		padding-right: 80rpx;
+		padding-left: 80rpx;
+		background-image:linear-gradient(to top,#C4EAED,#DFE3EC);
+	}
+	/* 标题栏 */
+	.container .titleBox{
+		height: 450rpx;
+	}
+	/* 返回按钮样式 */
+	.container .navBox{
+		position: sticky;
+		top: 100rpx;
+		left: -40rpx;
+		justify-content: center;
+	}
+	.container .navBox .backBotton{
+		font-size: 70rpx;
+		width: 70rpx;
+		height: 70rpx;
+	}
+	/* 登录标题栏 */
+	.container .titleBox .title{
+		position: absolute;
+		bottom: 50rpx;
+	}
+	/* SING IN 的样式 */
+	.container .titleBox .title .singIn{
+		margin-left: 2rpx;
+		font-size: 20rpx;
+		color: #94979d;
+	}
+	/* 欢迎登录样式 */
+	.container .titleBox .title .titleText{
+		font-size: 100rpx;
+		color: #4C8045;
+	}
+	
+	/* 中间输入框 */
+	.container .contentBox{
+		margin-top: 80rpx;
+	}
+	.container .contentBox .userBox,
+	.container .contentBox .passwordBox{
+		align-items: center;
+		margin-bottom: 50rpx;
+		height: 80rpx;
+		padding-left: 10rpx;
+		border-radius: 10rpx;
+		background-color: #FFFFFF;
+	}
+	/* 账号输入框和密码输入框 */
+	.container .contentBox .userBox .userInput,
+	.container .contentBox .passwordBox .passwordInput{
+		/* background-color: red; */
+		border-left-color: #4C8045;
+		border-left-width: 1rpx;
+		border-radius: 1rpx;
+		padding-left: 10rpx;
+		margin-left: 10rpx;
+		flex: 1;
+		height: 40rpx;
+		line-height: 20rpx;
+	}
+	/* 登录按钮 */
+	.container .contentBox .loginBox{
+		padding-top: 12rpx;
+		margin-bottom: 50rpx;
+		flex: 1;
+		background-color: #4C8045;
+		height: 80rpx;
+		border-radius: 10rpx;
+	}
+	/* 注册和忘记密码 */
+	.container .contentBox .registerBox{
+		justify-content: space-between;
+	}
+	/* 注册文字 */
+	.container .contentBox .registerBox .register{
+		color: #45A2FF;
+	}
+	.container .contentBox .registerBox .register,
+	.container .contentBox .registerBox .lostPassword{
+		font-size: 30rpx;
+	}
+	/* 底部外部授权全部居中 */
+	.container .extraBox{
+		margin-top: 50rpx;
+		align-items: center;
+	}
+	/* 服务协议的一行垂直居中 */
+	.container .extraBox .extraTextBox{
+		align-items: center;
+		margin-bottom:50rpx;
+	}
+	/* 服务协议的一行 */
+	.container .extraBox .extraTextBox .extraText{
+		font-size: 30rpx;
+	}
+	/* 服务协议样式 */
+	.container .extraBox .extraTextBox .service{
+		color: #45A2FF;
+	}
+	/* 外部QQ、微信等登录方式 */
+	.container .extraBox .externalLinkBox .linkImage{
+		width: 100rpx;
+		height: 100rpx;
+		margin: 20rpx;
+	}
+</style>

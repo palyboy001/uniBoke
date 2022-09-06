@@ -1,0 +1,87 @@
+<template>
+	<view class="content">
+		<view :class="[float?'leftMessage':'rightMessage','message']">
+			<image @click="navToUser()" class="userInfoImage" src="/static/swipeImage/1.jpg" mode="aspectFill"></image>
+			<!-- 文字内容 -->
+			<!-- <text :class="[float?'leftMessageText':'rightMessageText','messageText','textHua','textBackground']">{{text}}</text> -->
+			<!-- 图片内容(宽度不变,高度自适应) -->
+			<image 
+				:class="[float?'leftMessageText':'rightMessageText','messageText']" 
+				src="/static/swipeImage/4.jpg" 
+				mode="widthFix"
+				@click="lookImage('/static/swipeImage/4.jpg')"
+			></image>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"message",
+		props:['float'],
+		data() {
+			return {
+				text:"fdsfdsf阿三大dsads 苏打萨达萨达萨达撒撒旦撒旦撒旦打撒打撒撒旦撒旦撒的撒旦撒旦撒旦撒旦撒撒洒洒水撒撒飒飒阿萨",
+				// float:false
+			};
+		},
+		methods:{
+			//查看图片
+			lookImage(res){
+				getApp().lookImage(res)
+			},
+			// 跳转至个人主页
+			navToUser(){
+				uni.navigateTo({
+					url:"/pages/anthorInformation/anthorInformation"
+				})
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.content{
+		margin-top: 30rpx;
+		display: flex;
+	}
+	/* 消息模块 */
+	/* 对方消息样式 */
+	.content .leftMessage{
+		flex-direction: row;
+	}
+	/* 我方消息样式 */
+	.content .rightMessage{
+		flex-direction: row-reverse;
+	}
+	/* 头像 */
+	.content .message .userInfoImage{
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 100rpx;
+	}
+	/* 消息 */
+	.content .message .messageText{
+		/* flex: 1; */
+		min-width: 0;
+		max-width: 490rpx;
+		min-height: 80rpx;
+		font-size: 30rpx;
+		border-radius: 15rpx;
+	}
+	.content .message .textBackground{
+		background-color: aqua;
+		padding-top: 20rpx;
+		padding-bottom: 20rpx;
+		padding-left: 20rpx;
+	}
+	/* 对方文字消息 */
+	.content .message .leftMessageText{
+		margin-left: 20rpx;
+		padding-right: 5rpx;
+	}
+	/* 我方文字消息 */
+	.content .message .rightMessageText{
+		margin-right: 20rpx;
+	}
+</style>

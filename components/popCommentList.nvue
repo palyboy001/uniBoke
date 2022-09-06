@@ -1,0 +1,288 @@
+<template>
+	<view class="content">
+		<!-- 评论弹出层 -->
+		<view class="commentBox" 
+			:style="{'height':equipment.screenHeight + 'px','width':equipment.screenWidth+'px'}"
+			v-if="showComment"
+		>
+			<view class="transparent" 
+				@click="showCommentList()"
+				:style="{'height':countCommentTranspaentTop(),'width':width}"
+			></view>
+			<view class="commentListBox" 
+				:style="{'height':getHeight(),'width':width,'top':showCommentAnimation+'px'}"
+			>
+				<view class="commentTitle">
+					<text class="text textHua">全部评论1000+</text>
+				</view>
+				<view class="commentList">
+					<list class="list" :show-scrollbar="false" :style="{'height':getHeight(),'width':width+'px'}">
+						<cell v-for="(item,index) in commentList" :ref="'comment'+index">
+							<comment
+								:comment="item"
+								:isBigImage="false"
+							></comment>
+						</cell>
+						<cell>
+							<text class="endText textHua">没有更多啦~</text>
+						</cell>
+						<cell style="height: 130rpx;">
+							<!-- <text class="endText textHua">没有更多啦~</text> -->
+						</cell>
+					</list>
+				</view>
+				<!-- 输入框 -->
+				<view class="inputBox" :style="{'width':width+'px'}">
+					<view class="inputBorder">
+						<input class="input textHua" type="text" v-model="commentContent" placeholder="请输入善意的言语"
+							:placeholder-style="inputStyle">
+						<text class="iconfont icon firstColor-font">&#xe704;</text>
+						<text class="iconfont icon firstColor-font">&#xe609;</text>
+					</view>
+					<view class="send firstBackgroundColor" @click="sendCpomment()">
+						<text class="sendText textHua firstColor-font">发送</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {mapState} from 'vuex'
+	// import comment from '@/components/comment.nvue'
+	export default {
+		name:"popCommentList",
+		props:['showComment'],
+		data() {
+			return {
+				commentContent:"",//发布评论内容
+				showCommentAnimation:0,//显示弹出评论区的动画
+				glimmer:false,//是否为新发送的消息
+				commentList: [{
+							user: {
+								nickName: "怕昵称",
+								userId: "",
+								infoImage: "/static/swipeImage/1.jpg",
+								tle: "",
+								address: "北京",
+								sex: 1,
+								birthday: "",
+								personaliy: ""
+							},
+							zan: "",
+							sendTime: "昨天16:02",
+							commentContent: "各种傻逼文案1----",
+							children: []
+						},
+						{
+							user: {
+								nickName: "弄昵称",
+								userId: "",
+								infoImage: "/static/swipeImage/1.jpg",
+								tle: "",
+								address: "北京",
+								sex: 1,
+								birthday: "",
+								personaliy: ""
+							},
+							zan: "9999",
+							sendTime: "昨天16:02",
+							commentContent: "各种傻逼文案2----",
+							children: []
+						},
+				
+					]
+			};
+		},
+		methods:{
+			//弹出评论区的动画
+			showCommentFuntion(){
+				let height = this.getHeight().split("p")[0];
+				this.showCommentAnimation = height
+				let time = setInterval(() => {
+					this.showCommentAnimation -= 80
+					// console.log(this.showCommentAnimation)
+					if(this.showCommentAnimation < 0 || this.showCommentAnimation == 0){
+						clearInterval(time)
+					}
+				}, 24);
+			},
+			
+			//隐藏弹出评论区
+			hideCommentFuntion(call){
+				let height = this.getHeight().split("p")[0];
+				let time = setInterval(() => {
+					this.showCommentAnimation += 80
+					// console.log(this.showCommentAnimation)
+					if(this.showCommentAnimation > height || this.showCommentAnimation == height){
+						clearInterval(time)
+						//回调函数
+						call(true)
+					}
+				}, 24);
+			},
+			
+			//发送评论
+			sendCpomment() {
+				console.log("正在发送")
+				let comment = {
+					user: this.user,
+					zan: "",
+					sendTime: "昨天000.000",
+					isNew:1,
+					commentContent: "",
+					children: []
+				}
+				comment.commentContent = this.commentContent
+				//添加评论
+				this.commentList.push(comment)
+				//是否闪烁背景
+				// this.glimmer = true
+				this.commentContent = ''
+				this.localTopItem()
+			},
+			
+			// 定位到第一个评论
+			localTopItem(){
+				const dom = uni.requireNativePlugin('dom')
+				const el = this.$refs.comment0[0]
+				dom.scrollToElement(el, {})
+			},
+			
+			//获取评论区域长度
+			getHeight(){
+				let height = getApp().globalData.screenHeight * 0.5
+				return height + 'px'
+			},
+			
+			//计算弹出评论区透明位置的高度
+			countCommentTranspaentTop(){
+				// 获取弹出评论的高度,截取前面数字
+				let height = this.getHeight().split("p")[0];
+				let top = getApp().globalData.screenHeight - height
+				return top + 'px'
+			},
+			
+			//隐藏弹出评论区
+			showCommentList(){
+				uni.hideKeyboard();
+				this.hideCommentFuntion((res) =>{
+					//调用父组件的方法
+					this.$parent.showCommentList()
+				})
+				
+			},
+			
+			
+		},
+		watch:{
+			//侦听showComment的变化
+			showComment(newValues,oldValues){
+				if(newValues){
+					this.showCommentFuntion()
+				}
+			}
+		},
+		components:{
+			comment: () => import ( '@/components/comment.nvue'),
+		},
+		computed: {
+			...mapState(['inputStyle','user','equipment'])
+		}
+	}
+</script>
+
+<style scoped>
+	.content .commentBox{
+		position: fixed;
+		/* background-color: #ff7272; */
+		/* opacity: 0.2; */
+	}
+	
+	.content .commentBox{
+		
+	}
+	
+	/* 透明区域 */
+	.content .commentBox .transparent{
+		/* background-color: #000000; */
+	}
+	/* 评论内容区域 */
+	.content .commentBox .commentListBox{
+		border-top-left-radius: 30rpx;
+		border-top-right-radius: 30rpx;
+		padding: 20rpx;
+		background-color: #FFFFFF;
+	}
+	/* 全部评论字体 */
+	.content .commentBox .commentListBox .commentTitle{
+		justify-content: center;
+		align-items: center;
+	}
+	.content .commentBox .commentListBox .commentTitle .text{
+		font-size: 35rpx;
+	}
+	/* 评论滚动区域 */
+	.content .commentBox .commentListBox .commentList .list{
+		padding-bottom: 50rpx;
+	}
+	.content .commentBox .commentListBox .commentList .list .endText{
+		font-size: 25rpx;
+		text-align: center;
+		color: #959595;
+	}
+	
+	/* 输入框区域 */
+	.content .commentBox .commentListBox .inputBox {
+		flex-direction: row;
+		align-items: center;
+		position: absolute;
+		bottom: 0rpx;
+		/* left: 100rp; */
+		height: 100rpx;
+		/* padding-bottom: 20rpx; */
+		background-color: #FFFFFF;
+	}
+	
+	/* input的边框区域 */
+	.content .commentBox .commentListBox .inputBox .inputBorder {
+		width: 550rpx;
+		height: 70rpx;
+		margin-left: 25rpx;
+		padding-left: 25rpx;
+		border-radius: 50rpx;
+		border-color: #4C8045;
+		border-width: 2rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	
+	/* 输入框样式 */
+	.content .commentBox .commentListBox .inputBox .inputBorder .input {
+		display: flex;
+		width: 370rpx;
+		height: 70rpx;
+		font-size: 30rpx;
+	}
+	
+	.content .commentBox .commentListBox .inputBox .inputBorder .icon {
+		margin-right: 30rpx;
+		font-size: 50rpx;
+	}
+	
+	/* 发送框 */
+	.content .commentBox .commentListBox .inputBox .send {
+		width: 130rpx;
+		height: 60rpx;
+		border-radius: 50rpx;
+		margin-left: 20rpx;
+	}
+	
+	.content .commentBox .commentListBox .inputBox .send .sendText {
+		text-align: center;
+		line-height: 60rpx;
+		font-size: 35rpx;
+		color: #FFFFFF;
+	}
+</style>

@@ -1,0 +1,388 @@
+<template>
+	<view class="container">
+		<statusBar :color="backgroundColor"></statusBar>
+		<!-- 顶部背景区域 -->
+		<view class="topImage">
+			<image class="backgroundImage" src="/static/background.png" mode="widthFix"></image>
+			<!-- 导航栏区域 -->
+			<view class="navBar" :style="{'top':navBarTop + 'px','right':20+'rpx'}">
+				<text class="setUp iconfont">&#xe602;</text>
+				<text class="date iconfont">&#xe641;</text>
+			</view>
+		</view>
+		<!-- 用户信息 -->
+		<view class="userBox" @click="navLogin()">
+			<!-- 头像 -->
+			<view class="userInfoImage">
+				<image class="image" src="/static/swipeImage/2.jpg" mode="aspectFill"></image>
+			</view>
+			<!-- 中间等级、昵称区域 -->
+			<view class="midText">
+				<text class="nickName textHua">昵称</text>
+				<view class="levelAttribute">
+					<!-- VIP -->
+					<view class="VIPlevelBox">
+						<text class="VIPIcon iconfont">&#xe76b;</text>
+						<text class="levelText textHua">VPI10</text>
+					</view>
+					<!-- 账号等级 -->
+					<text class="level textHua">Lv.100</text>
+					<!-- 悬赏余额 -->
+					<view class="goldBox">
+						<image class="glodImage" src="/static/gold.png" mode=""></image>
+						<text class="goldNumber textHua">1110</text>
+					</view>
+				</view>
+				<!-- 个性签名 -->
+				<view class="signature">
+					<text class="text signIcon iconfont">&#xe606;</text>
+					<text class="text signText textHua">个性签名</text>
+				</view>
+			</view>
+			<view></view>
+		</view>
+		<!-- 关注、粉丝、获赞、访客 -->
+		<view class="userAttribute">
+			<!-- 获赞 -->
+			<view class="acquire">
+				<text class="textHua userAttributeNumber acquireNumber">0</text>
+				<text class="textHua userAttributeText acquireText">获赞</text>
+			</view>
+			<!-- 粉丝 -->
+			<view class="fan">
+				<text class="textHua userAttributeNumber fanNumber">10</text>
+				<text class="textHua userAttributeText fanText">粉丝</text>
+			</view>
+			<!-- 关注 -->
+			<view class="attention">
+				<text class="textHua userAttributeNumber attentionNumber">100</text>
+				<text class="textHua userAttributeText attentionText">关注</text>
+			</view>
+			<!-- 访客 -->
+			<view class="visitor">
+				<text class="textHua userAttributeNumber visitorNumber">9999</text>
+				<text class="textHua userAttributeText visitorText">访客</text>
+			</view>
+		</view>
+		<!-- 发布、点赞、浏览记录、收藏 -->
+		<view class="sendAttribute">
+			<!-- 发布 -->
+			<view class="userSend">
+				<image class="userSendImage image" src="/static/userSend.png"></image>
+				<text class="textHua sendAttributeText userSendText">已发布</text>
+			</view>
+			<!-- 点赞 -->
+			<view class="clickUp">
+				<image class="clickUpImage image" src="/static/clickUp.png"></image>
+				<text class="textHua sendAttributeText clickUpText">点赞</text>
+			</view>
+			<!-- 收藏 -->
+			<view class="collect">
+				<image class="collectImage image" src="/static/collect.png"></image>
+				<text class="textHua sendAttributeText collectText">收藏</text>
+			</view>
+			<!-- 浏览记录 -->
+			<view class="visit">
+				<image class="visitImage image" src="/static/history.png"></image>
+				<text class="textHua sendAttributeText visitText">浏览记录</text>
+			</view>
+		</view>
+		<view class="systemContent">
+			<!-- 个性装扮 -->
+			<view class="rowBox decorate">
+				<text class="icon textHua iconfont systemContentIcon">&#xe62b;</text>
+				<text class="text textHua systemContentText">个性装扮</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- 失物招领 -->
+			<view class="rowBox lost">
+				<text class="icon textHua iconfont systemContentIcon">&#xfbb0;</text>
+				<text class="text textHua systemContentText">失物招领</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- 悬赏 -->
+			<view class="rowBox reward">
+				<text class="icon textHua iconfont systemContentIcon">&#xe61a;</text>
+				<text class="text textHua systemContentText">悬赏奖励</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- 兑换商城 -->
+			<view class="rowBox shoppingMall">
+				<text class="icon textHua iconfont systemContentIcon">&#xe62b;</text>
+				<text class="text textHua systemContentText">兑换商城</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- 清理缓存 -->
+			<view class="rowBox clear">
+				<text class="icon textHua iconfont systemContentIcon">&#xe615;</text>
+				<text class="text textHua systemContentText">清理缓存</text>
+				<text class="dataNumber textHua">1024</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- bug提交 -->
+			<view class="rowBox submitBug">
+				<text class="icon textHua iconfont systemContentIcon">&#xe8e8;</text>
+				<text class="text textHua systemContentText">bug反馈</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+			<!-- 客服 -->
+			<view class="rowBox customerService">
+				<text class="icon textHua iconfont systemContentIcon">&#xe63a;</text>
+				<text class="text textHua systemContentText">客服</text>
+				<text class="back textHua iconfont systemContentBackIcon">&#xfbb1;</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from '@/components/statusBar.nvue'
+	import {mapState} from 'vuex'
+	export default {
+		data() {
+			return {
+				//顶部设置、签到top值
+				navBarTop:getApp().globalData.statusBarHeight + 10,
+			}
+		},
+		methods: {
+			navLogin(){
+				uni.navigateTo({
+					url:"/pages/login/login"
+				})
+			}
+		},
+		components:{
+			statusBar
+		},
+		computed:{
+			...mapState(['backgroundColor'])
+		}
+	}
+</script>
+
+<style scoped>
+	/* 设置横排 */
+	.container .userBox,/* 用户信息 */
+	.container .userBox .midText .levelAttribute,/* VIP等级、账号等级、悬赏余额 */
+	.container .userBox .midText .levelAttribute .VIPlevelBox,/* VIP等级 */
+	.container .userBox .midText .levelAttribute .goldBox,/* 悬赏余额 */
+	.container .userBox .midText .signature,/* 个性签名 */
+	.container .userAttribute,/* 关注、粉丝总框 */
+	.container .sendAttribute,/* 发布、点赞、收藏、历史记录 */
+	.container .systemContent .rowBox/* 系统功能 */{
+		flex-direction: row;
+	}
+	/* 全部内容外边距 */
+	.container .userBox,/* 用户信息 */
+	.container .userAttribute,/* 关注、粉丝总框 */
+	.container .sendAttribute,/* 发布、点赞、收藏、历史记录 */
+	.container .systemContent/* 系统功能 */{
+		margin-left: 50rpx;
+		margin-right: 50rpx;
+	}
+	/* 背景图片 */
+	.container .topImage{
+		max-height: 300rpx;
+	}
+	.container .topImage .navBar{
+		position: fixed;
+		flex-direction: row-reverse;
+	}
+	/* 设置、签到 */
+	.container .topImage .navBar .setUp,
+	.container .topImage .navBar .date{
+		color: #FFFFFF;
+		font-size: 50rpx;
+		font-weight: bold;
+		margin-right: 20rpx;
+	}
+	/* 用户信息 */
+	.container .userBox{
+		margin: 40rpx;
+	}
+	/* 用户头像*/
+	.container .userBox .userInfoImage{
+		
+	}
+	.container .userBox .userInfoImage .image{
+		width: 110rpx;
+		height: 110rpx;
+		border-radius: 110rpx;
+	}
+	.container .userBox .midText{
+		margin-left: 40rpx;
+	}
+	/* 昵称 */
+	.container .userBox .midText .nickName{
+		font-size: 40rpx;
+	}
+	/* VIP等级、账号等级、悬赏余额 */
+	.container .userBox .midText .levelAttribute{
+		align-items: center;
+	}
+	/* VIP等级 */
+	.container .userBox .midText .levelAttribute .VIPlevelBox{
+		background-color: #FFD215;
+		border-radius: 30rpx;
+		height: 30rpx;
+		padding-left: 5rpx;
+		padding-right: 5rpx;
+	}
+	.container .userBox .midText .levelAttribute .VIPlevelBox .VIPIcon,
+	.container .userBox .midText .levelAttribute .VIPlevelBox .levelText{
+		font-size: 20rpx;
+		color: #FF0000;
+		font-weight: bold;
+	}
+	/* 等级的总区域 VIP等级、悬赏余额垂直居中 */
+	.container .userBox .midText .levelAttribute,
+	.container .userBox .midText .levelAttribute .VIPlevelBox,
+	.container .userBox .midText .levelAttribute .goldBox{
+		align-items: center;
+	}
+	/* 账号等级 */
+	.container .userBox .midText .level{
+		font-size: 20rpx;
+		margin-left: 10rpx;
+		margin-right: 10rpx;
+		font-weight: bold;
+		color: #FF0000;
+	}
+	.container .userBox .midText .levelAttribute .goldBox{
+		border-radius: 40rpx;
+		/* width: 80rpx; */
+		height: 35rpx;
+		padding-left: 10rpx;
+		padding-right: 10rpx;
+		background-color: #8A9AA8;
+		justify-content: center;
+	}
+	/* 金币图片 */
+	.container .userBox .midText .levelAttribute .goldBox .glodImage{
+		width: 28rpx;
+		height: 28rpx;
+		margin-right: 10rpx;
+	}
+	.container .userBox .midText .levelAttribute .goldBox .goldNumber{
+		font-size: 23rpx;
+		font-weight: bold;
+		color: #FFFFFF;
+	}
+	/* 个性签名 */
+	.container .userBox .midText .signature{
+		align-items: center;
+	}
+	.container .userBox .midText .signature .text{
+		font-size: 28rpx;
+		color: #8A9AA8;
+	}
+	
+	/* 关注、粉丝、访客、获赞 */
+	/* 发布、点赞、收藏、历史记录 */
+	.container .userAttribute,
+	.container .sendAttribute{
+		background-color: #FFFFFF;
+		justify-content: space-between;/* 两端对齐 */
+		padding: 25rpx 45rpx;
+		border-radius: 20rpx;
+	}
+	/* 关注、粉丝、访客、获赞文字和数字居中对齐 */
+	.container .userAttribute .acquire,
+	.container .userAttribute .fan,
+	.container .userAttribute .attention,
+	.container .userAttribute .visitor,
+	/* 发布、点赞、收藏、历史记录的内容居中 */
+	.container .sendAttribute .userSend,
+	.container .sendAttribute .clickUp,
+	.container .sendAttribute .collect,
+	.container .sendAttribute .visit,
+	/* 系统功能垂直剧中 */
+	.container .systemContent .rowBox{
+		align-items: center;
+	}
+	/* 数字 */
+	.container .userAttribute .userAttributeNumber{
+		
+	}
+	/* 关注、粉丝、访客、获赞的文字 */
+	.container .userAttribute .userAttributeText{
+		font-size: 25rpx;
+	}
+	
+	/* 发布、点赞、收藏、历史记录 */
+	.container .sendAttribute{
+		border-radius: 20rpx;
+		background-color: #FFFFFF;
+		margin-top: 20rpx;
+		margin-bottom: 20rpx;
+	}
+	/* 发布、点赞、收藏、历史记录的文字 */
+	.container .sendAttribute .sendAttributeText{
+		margin-top: 5rpx;
+		font-size: 23rpx;
+	}
+	/* 图标大小 */
+	.container .sendAttribute .image{
+		width: 50rpx;
+		height: 50rpx;
+	}
+	
+	/* 底部系统功能区域 */
+	.container .systemContent{
+		padding: 25rpx 45rpx;
+		background-color: #FFFFFF;
+		border-radius: 20rpx;
+	}
+	/* 每个项目的总体样式 */
+	.container .systemContent .rowBox{
+		align-items: center;
+		margin: 20rpx 0;
+	}
+	/* 图标样式 */
+	.container .systemContent .rowBox .systemContentIcon{
+		font-size: 50rpx;
+	}
+	/* 中间文字样式 */
+	.container .systemContent .rowBox .systemContentText{
+		font-size: 35rpx;
+		flex: 1;
+		margin-left: 20rpx;
+	}
+	/* 清理缓存的数字样式 */
+	.container .systemContent .clear .dataNumber{
+		font-size: 30rpx;
+	}
+	/* 右边icon样式 */
+	.container .systemContent .rowBox .systemContentBackIcon{
+		font-size: 45rpx;
+	}
+	/* 装扮图标颜色 */
+	.container .systemContent .decorate .icon{
+		color: #30A0EB;
+	}
+	/* 失物招领图标颜色 */
+	.container .systemContent .lost .icon{
+		color: #1DCE75;
+	}
+	/* 悬赏图标颜色 */
+	.container .systemContent .reward .icon{
+		color: #FECD06;
+	}
+	/* 兑换商城图标颜色 */
+	.container .systemContent .shoppingMall .icon{
+		color: #D4237A;
+	}
+	/* 清理缓存图标颜色 */
+	.container .systemContent .clear .icon{
+		color: #19FA28;
+	}
+	/* bug提交图标颜色 */
+	.container .systemContent .submitBug .icon{
+		color: #FF0000;
+	}
+	/* 客服图标颜色 */
+	.container .systemContent .customerService .icon{
+		color: #30A0EB;
+	}
+</style>

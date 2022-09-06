@@ -1,0 +1,172 @@
+<template>
+	<view class="container">
+		<view :class="[glimmerShow?'contentMax':'','content']">
+			<view class="infoImageBox">
+				<image class="image" src="/static/swipeImage/1.jpg" mode="aspectFill"></image>
+			</view>
+			<view class="nickNameBox">
+				<view class="nickName">
+					<text class="textHua nickNameText">{{comment.user.nickName}}</text>
+				</view>
+				<view class="commentConetent">
+					<text class="textHua topicText">{{comment.commentContent}}</text>
+				</view>
+				<view class="botom">
+					<text class="textHua sendTime">{{comment.sendTime}}</text>
+					<text class="textHua address">{{comment.user.address}}</text>
+					<text class="textHua call">回复</text>
+					<view class="zanBox">
+						<view class="clickZanBox">
+							<text class="number zan">{{comment.zan}}</text>
+							<text class="iconfont zan">&#xe651;</text>
+						</view>
+						<text class="iconfont cai">&#xe70e;</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		
+		<view class="children">
+			<commentChildren v-for="(item,index) in comment.children" :comment="item"></commentChildren>
+		</view>
+		<view class="more" v-if="moreComment">
+			<text class="clickMoreComment textHua">-----  展开更多评论</text>
+			<text class="clickMoreComment iconfont">&#xe65c;</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	import commentChildren from './commentChildren.nvue'
+	
+	export default {
+		name:"comment",
+		props:['comment','moreCOmment','glimmer'],
+		data() {
+			return {
+				glimmerShow:false,
+			};
+		},
+		components:{
+			commentChildren
+		},
+		created() {
+			// 监听是否闪烁背景
+			console.log(this.comment.isNew)
+			if(this.comment.isNew){
+				let i = 0
+				let time = setInterval(() =>{
+					i++
+					this.glimmerShow = !this.glimmerShow
+					if(i > 6 || i==6){
+						clearInterval(time)
+					}
+				},60)
+			}
+		},
+		watch:{
+
+		}
+	}
+</script>
+
+<style scoped>
+	/* 主框架 */
+	.container{
+		display: flex;
+	}
+	/* 全部内容 */
+	.container .content{
+		display: flex;
+		flex-direction: row;
+		padding: 10rpx;
+	}
+	/* 闪烁背景 */
+	.contentMax{
+		background-color: #f4f4f4;
+	}
+	/* 头像区域 */
+	.container .content .infoImageBox .image{
+		width: 60rpx;
+		height: 60rpx;
+		border-radius: 80rpx;
+	}
+	
+	/* 中间昵称\内容区域 */
+	.container .content .nickNameBox {
+		margin-left: 25rpx;
+		margin-top: -5rpx;
+		flex: 1;
+	}
+	/* 昵称 */
+	.container .content .nickNameBox .nickName .nickNameText{
+		font-size: 30rpx;
+		color: #888888;
+	}
+	/* 内容区域 */
+	.content .nickNameBox .commentConetent .topicText{
+		font-size: 35rpx;
+	}
+	
+	.container .content .nickNameBox .botom{
+		align-items: center;
+	}
+	
+	/* 底部时间地址和点赞区域 */
+	.container .content .nickNameBox .botom,.content .nickNameBox .botom .zanBox,
+	.container .content .nickNameBox .botom .zanBox .clickZanBox{
+		display: flex;
+		flex-direction: row;
+	}
+	/* 字体大小 */
+	.container .content .nickNameBox .botom .sendTime,.address,.call{
+		color: #888888;
+		margin-right: 15rpx;
+		font-size: 25rpx;
+	}
+	
+	/* 点赞\踩 */
+	.container .content .nickNameBox .botom .zanBox{
+		margin-left: 50rpx;
+		display: flex;
+		justify-content: center;
+	}
+	/* 点赞区域 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox{
+		margin-right: 15rpx;
+		align-items: center;
+		/* min-width: 50rpx; */
+		width: 200rpx;
+		flex-direction: row-reverse;
+	}
+	/* 点赞的样式 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox .zan{
+		color: #888888;
+	}
+	/* 点赞的数据展示 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox .number{
+		margin-top: 8rpx;
+		margin-left: 5rpx;
+		font-size: 25rpx;
+	}
+	.container .content .nickNameBox .botom .zanBox .cai{
+		font-size: 50rpx;
+		color: #888888;
+	}
+	
+	/* 子评论 */
+	.container .children{
+		/* flex: 1; */
+		padding-left: 100rpx;
+	}
+	
+	/* 展开更多评论 */
+	.container .more{
+		flex-direction: row;
+		margin-left: 100rpx;
+	}
+	.container .more .clickMoreComment{
+		color: #888888;
+		font-size: 25rpx;
+	}
+</style>

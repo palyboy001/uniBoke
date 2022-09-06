@@ -1,0 +1,66 @@
+<template>
+	<view class="content">
+		<view class="swipeBox" :style="{'width':width}">
+			<swiper 
+				:indicator-dots="true" 
+				:autoplay="true" 
+				:interval="5000" 
+				:easing-function="linear"
+				:circular="true"
+				class="swiper"
+				>
+				<swiper-item @click="navigateTo()">
+					<view class="swiper-item">
+						<image class="swipeImg" src="@/static/swipeImage/4.jpg" :style="{'width':width}" mode="aspectFill"></image>
+					</view>
+				</swiper-item>
+				<swiper-item>
+					<view class="swiper-item">
+						<image class="swipeImg" src="@/static/swipeImage/2.jpg" :style="{'width':width}" mode="aspectFill"></image>
+					</view>
+				</swiper-item>
+				<swiper-item>
+					<view class="swiper-item">
+						<image class="swipeImg" src="@/static/swipeImage/3.jpg" :style="{'width':width}" mode="aspectFill"></image>
+					</view>
+				</swiper-item>
+			</swiper>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props:['width'],
+		name:"swipe",
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style scoped>
+	.content{
+		
+	}
+	.content .swipeImage .swipeBox{
+		height: 300rpx;
+		overflow: hidden;
+	}
+	/* 图片样式 */
+	.content .swipeImage .swipeBox .swipeImg{
+		height: 300rpx;
+		border-radius: 20rpx;
+		border-width: 2rpx;
+		border-color: #FFFFFF;
+		
+	}
+	
+	.content .swipeImage .swipeBox .swiper{
+		height: 300rpx;
+		overflow: hidden;
+		
+	}
+</style>

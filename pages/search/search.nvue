@@ -1,0 +1,41 @@
+<template>
+	<view class="content">
+		<!-- 手机状态栏 -->
+		<view class="status_bar" :style="{height:statusBarHeight + 'px'}"></view>
+		<input
+			class="inputKey textHua firstColor-font"
+			 @click="getFocus()"
+			ref="inputKey" 
+			type="text"
+			disabled="true"
+			confirm-type="search"
+			placeholder-style="color:#4C8045" 
+			placeholder="请输入内容" v-model="hotKey"/>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				hotKey:"",
+				statusBarHeight:getApp().globalData.statusBarHeight,//顶部状态高度
+			}
+		},
+		methods: {
+			
+		},
+		mounted() {
+			// this.$nextTick(() =>{
+			// 	this.$refs.op.focus()
+			// 	// this.focus = true
+			// })
+		}
+	}
+</script>
+
+<style socped>
+	.keyBox{
+		background-color: #eeffa0;
+	}
+</style>
