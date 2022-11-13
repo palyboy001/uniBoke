@@ -1,0 +1,114 @@
+<template>
+	<view class="container">
+		<statusBar :color="backgroundColor"></statusBar>
+		<uni-nav-bar
+			leftIcon="back"
+			@clickLeft="back"
+			title="发布话题"
+			:backgroundColor="backgroundColor"
+			:color="color"
+		></uni-nav-bar>
+		<view class="contentBox">
+			<!-- 内容区域 -->
+			<view class="topicContent">
+				<textarea 
+					class="textHua textarea"
+					name="texttarea"
+					maxlength="-1"
+					v-model="content"
+					placeholder="记录心情,快乐每一天"
+					placeholder-class="texttareaStyle"
+				></textarea>
+			</view>
+			<!-- 导入图片 -->
+			<view class="importImage">
+				<text class="importImg iconfont">&#xe600;</text>
+				<text class="importImg iconfont">&#xe704;</text>
+			</view>
+			<!-- 所在位置 -->
+			<view class="addressBox">
+				<text class="text textHua">所在位置</text>
+				<view class="rightText">
+					<text class="textHua address">{{address}}</text>
+					<text class="iconfont addressIcon">&#xfbb1;</text>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from '@/components/statusBar.nvue'
+	import {mapState} from 'vuex'
+	export default {
+		data() {
+			return {
+				content:"",
+				address:"请选择"
+			}
+		},
+		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			}
+		},
+		components:{
+			statusBar
+		},
+		computed:{
+			...mapState(['color','backgroundColor'])
+		}
+	}
+</script>
+
+<style scoped>
+	/* 多行文本框的默认样式 */
+	.texttareaStyle{
+		color: #4C8045;
+	}
+	/* 全部内容 */
+	.container .contentBox{
+		margin-top: 20rpx;
+		margin-left: 50rpx;
+		margin-right: 50rpx;
+	}
+	/* 文本框样式 */
+	.container .contentBox .topicContent .textarea{
+		font-size: 35rpx;
+		color: #000000;
+	}
+	/* 导入图片样式和位置 */
+	.container .contentBox .importImage,
+	.container .contentBox .addressBox,
+	.container .contentBox .addressBox .rightText{
+		flex-direction: row;
+		align-items: center;
+	}
+	.container .contentBox .importImage .importImg{
+		color: #838383;
+		margin-right: 30rpx;
+	}
+	/* 位置 */
+	.container .contentBox .addressBox{
+		justify-content: space-between;
+		margin-top: 15rpx;
+		padding: 5rpx 0;
+		border-top-color: #838383;
+		border-bottom-color: #838383;
+		border-top-width: 2rpx;
+		border-bottom-width: 2rpx;
+	}
+	/*  */
+	.container .contentBox .addressBox .text{
+		font-size: 30rpx;
+	}
+	.container .contentBox .addressBox .address{
+		font-size: 25rpx;
+		color: #838383;
+	}
+	.addressIcon{
+		color: #838383;
+	}
+</style>

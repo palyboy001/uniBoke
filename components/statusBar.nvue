@@ -1,0 +1,22 @@
+<template>
+	<view class="content">
+		<!-- 手机状态栏 -->
+		<view class="status_bar" :style="{'height':statusBarHeight + 'px','background-color':color}"></view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"statusBar",
+		props:['color'],
+		data() {
+			return {
+				statusBarHeight:getApp().globalData.statusBarHeight
+			};
+		}
+	}
+</script>
+
+<style scoped>
+
+</style>

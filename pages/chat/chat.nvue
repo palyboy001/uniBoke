@@ -1,0 +1,244 @@
+<template>
+	<view class="content" @click="hideKeyBorad()">
+		<!-- 状态栏 -->
+		<statusBar :color="backgroundColor"></statusBar>
+		<!-- 导航栏 -->
+		<uni-nav-bar
+			leftIcon="back"
+			leftText="99+"
+			@clickLeft="back()"
+			title="对方昵称"
+			rightIcon="more"
+			:backgroundColor="backgroundColor"
+			:color="color"
+			ref="navBar"
+		></uni-nav-bar>
+		<view class="messageBox" :style="{'top':keyBoardHeight+'px'}">
+			<list>
+				<cell>
+					 <!-- v-for="(item,index) in user" -->
+					<message :float="true"></message>
+					<message :float="false"></message>
+				</cell>
+			</list>
+		</view>
+		<view class="bottomInputBox" :style="{'width':width+'px'}">
+			<!-- 相机 -->
+			<view class="camera">
+				<text class="iconfont">&#xe603;</text>
+			</view>
+			<!-- 输入框 -->
+			<view class="inputbox">
+				<input 
+					class="input textHua" 
+					type="text" 
+					:style="{'width':getInputWidth(width)}"
+					:placeholder-style="inputStyle"
+					placeholder="善意的评论,健康你我他"
+				>
+				<text class="speech iconfont">&#xe888;</text>
+				<text class="iconfont">&#xe609;</text>
+			</view>
+			<!-- 更多 -->
+			<view class="more">
+				<text class="iconfont">&#xe726;</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from "@/components/statusBar.nvue"
+	import message from "@/components/message.nvue"
+	import { mapState, mapActions, mapMutations } from 'vuex'
+	
+	export default {
+		data() {
+			return {
+				user:[
+						{
+							nickname:"腿毛小勇士",
+							userImage:"/static/swipeImage/1.jpg",
+							message:{
+								text:"各种文案....",
+								sendTime:"3小时"
+							}
+						},
+						{
+							nickname:"腿毛小勇士",
+							userImage:"/static/swipeImage/1.jpg",
+							message:{
+								text:"各种文案....",
+								sendTime:"3小时"
+							}
+						},
+						// {
+						// 	nickname:"腿毛小勇士",
+						// 	sendTime:"18小时前",
+						// 	userImage:"/static/swipeImage/1.jpg",
+						// 	topic:{
+						// 		text:"各种文案....",
+						// 		image:[
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg",
+						// 			"/static/swipeImage/2.jpg"
+						// 		],
+						// 		zan:1024,
+						// 		commentCount:1024
+						// 	}
+						// }
+				],
+				width:getApp().globalData.screenWidth,
+				keyBoardHeight:0,//键盘高度
+			}
+		},
+		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
+			// 获取input的宽度(取70%)
+			getInputWidth(width){
+				// console.log(width)
+				let inputWidth = width * 0.50
+				return inputWidth + 'px'
+			},
+			
+			// 获取键盘高度
+			getKeyBoxHeight(){
+				uni.onKeyboardHeightChange(res => {
+					console.log(res.height)
+					// 减去状态栏的高度
+					// setTimeout(() =>{
+						if(res.height !== 0){
+							this.keyBoardHeight = res.height - 11.5
+						}else{
+							this.keyBoardHeight = 0
+						}
+					// },0)
+				})
+			},
+			
+			getPositionHeight(){
+				let height = this.keyBoardHeight - getApp().globalData.statusBarHeight
+				return height + 'px'
+			},
+			
+			hideKeyBorad(){
+				uni.hideKeyboard()
+				// uni.offKeyboardHeightChange(() =>{
+				// 	console.log('隐藏键盘')
+				// 	this.keyBoardHeight = 0
+				// })
+			},
+			// #ifdef APP-NVUE
+			getDomHeight(doms){
+					setTimeout(()=> {
+						const dom = weex.requireModule('dom')
+						const result = dom.getComponentRect(doms, option => {
+							console.log('getComponentRect:', option)
+						// this.size = option.size
+						})
+					}, 100);
+			}
+			// #endif
+		},
+		components:{
+			statusBar,
+			message
+		},
+		created() {
+			//一开始监听键盘高度
+			this.getKeyBoxHeight()
+		},
+		onReady() {
+			// #ifdef APP-PLUS-NVUE
+			this.getDomHeight(this.$refs.navBar)
+			// #endif
+			
+		},
+		computed:{
+			...mapState(['backgroundColor','color','inputStyle'])
+		}
+	}
+</script>
+
+<style scoped>
+	.content{
+		position: relative;
+		top: 0rpx;
+		left: 0;
+	}
+	.content .messageBox{
+		padding-left: 30rpx;
+		padding-right: 30rpx;
+	}
+	/* 底部输入框 */
+	.content .bottomInputBox{
+		position: fixed;
+		bottom: 0;
+		height: 100rpx;
+		background-color: #ffffff;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	/* 相机、另一边的加号*/
+	.content .bottomInputBox .camera,
+	.content .bottomInputBox .more{
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 80rpx;
+		background-color: #4C8045;
+		align-items: center;
+		justify-content: center;
+	}
+	/* 单独相机样式 */
+	.content .bottomInputBox .camera{
+		margin-right: -35rpx;
+	}
+	.content .bottomInputBox .more{
+		margin-left: -35rpx;
+	}
+	/* icon的样式 */
+	.content .bottomInputBox .iconfont{
+		color: #ffffff;
+		font-size: 50rpx;
+	}
+	/* 输入框的边框 */
+	.content .bottomInputBox .inputbox{
+		/* width: 502rpx; */
+		flex-direction: row;
+		align-items: center;
+		height: 80rpx;
+		padding-left: 40rpx;
+		padding-right: 40rpx;
+		/* border-radius: 60rpx; */
+		border-color: #4C8045;
+		border-top-width: 2rpx;
+		border-bottom-width: 2rpx;
+	}
+	/* 输入样式 */
+	.content .bottomInputBox .inputbox .input{
+		font-size: 30rpx;
+	}
+	
+	/* 输入框里的图标样式 */
+	.content .bottomInputBox .inputbox .iconfont{
+		color: #4C8045;
+		margin-right: 20rpx;
+	}
+	.content .bottomInputBox .inputbox .speech{
+		font-size: 60rpx;
+		margin-left: 10rpx;
+		margin-right: 20rpx;
+		
+	}
+</style>

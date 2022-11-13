@@ -1,0 +1,357 @@
+<template>
+	<view class="content">
+		<!-- 手机状态栏 -->
+		<statusBar :color="backgroundColor"></statusBar>
+		<uni-nav-bar shadow leftIcon="back" @clickLeft="back" title="详细" rightIcon="more"
+			:backgroundColor="backgroundColor" :color="color">
+		</uni-nav-bar>
+		<!-- 话题详细 -->
+		<view class="topic" ref="topic">
+			<view class="userInfo">
+				<view class="infoImage" @click="navigator()">
+					<image class="image" src="../../static/swipeImage/1.jpg" mode="aspectFit"></image>
+				</view>
+				<view class="nickNameBox">
+					<text class="nickName textHua">昵称</text>
+					<text class="sendTime textHua">18小时前</text>
+				</view>
+				<view class="guanzhu">
+					<view @click="clickGuanzhu()" class="guanzhuBox firstBackgroundColor"
+						:class="[guanzhuSuccess?'guanzhuKeyframe':'guanzhuKeyframeMo']">
+						<!-- 使用结点信息判断元素存不存在 -->
+						<text class="text textHua iconfont"
+							:class="[guanzhuSuccess?'guanzhuTextKeyframe':'guanzhuTextKeyframeMo',successShowIcon?'.guanzhuTexgtKeyframeOpacity':'guanzhuTexgtKeyframeOpacityMo']" 
+							>&#xe8ad;</text>
+						<text class="text textHua">关注</text>
+					</view>
+				</view>
+			</view>
+			<view class="topicText">
+				<text class="topicContentText textHua">文章内的瞬时速度犯得上反对范德萨范德萨发达丰富的是否十分士大夫发是否都是收费收费的都是当时的顺丰到付对方 放松放松方式方法对付容-------</text>
+			</view>
+			<view class="topicImage">
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+				<image class="topicImages" mode="aspectFill" src="/static/swipeImage/2.jpg"></image>
+			</view>
+		</view>
+		<!-- 底下评论 -->
+		<view class="comment" :style="{'min-height':commentheight+'px'}">
+			<view class="commentTitle">
+				<text class="textHua">热评(10000+)</text>
+			</view>
+			<view class="commentList">
+				<comment v-for="(item,index) in commentList" :comment="item" ref="comment"></comment>
+				<view class="moreCommetnBox" @click="showCommentList()">
+					<text class="clickMoreComment textHua">全部评论</text>
+					<text class="clickMoreComment iconfont">&#xe65c;</text>
+				</view>
+			</view>
+		</view>
+		<!-- 评论弹出层 -->
+		<popCommentList :showComment="showComment" ref="popCommentList"></popCommentList>
+	</view>
+</template>
+
+<script>
+	import statusBar from '@/components/statusBar.nvue'
+	import comment from '@/components/comment.nvue'
+	import popCommentList from '@/components/popCommentList.nvue'
+	import {
+		mapState,
+		mapActions,
+		mapMutations
+	} from 'vuex'
+	export default {
+		data() {
+			return {
+				guanzhuSuccess: false, //测试变量
+				successShowIcon: false,//关注成功是否
+				showComment:false,//是否显示评论区
+				commentheight:0,//评论区最小高度
+				dom: null,//外包dom
+				commentContent: "", //评论输入内容
+				width: getApp().globalData.screenWidth,
+				commentList: [{
+						user: {
+							nickName: "怕昵称",
+							userId: "",
+							infoImage: "/static/swipeImage/1.jpg",
+							tle: "",
+							address: "北京",
+							sex: 1,
+							birthday: "",
+							personaliy: ""
+						},
+						zan: "",
+						sendTime: "昨天16:02",
+						commentContent: "各种傻逼文案1----",
+						children: []
+					},
+					{
+						user: {
+							nickName: "弄昵称",
+							userId: "",
+							infoImage: "/static/swipeImage/1.jpg",
+							tle: "",
+							address: "北京",
+							sex: 1,
+							birthday: "",
+							personaliy: ""
+						},
+						zan: "9999",
+						sendTime: "昨天16:02",
+						commentContent: "各种傻逼文案2----",
+						children: []
+					},
+
+				]
+			}
+		},
+		methods: {
+			//添加关注
+			clickGuanzhu() {
+				// uni.navigateTo({
+				// 	url:"/pages/test/test"
+				// })
+				setTimeout(() => {
+					this.guanzhuSuccess = !this.guanzhuSuccess
+					// this.textTest = !this.textTest
+				}, 5)
+				
+			},
+			//返回上一个页面
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+			
+			//显示隐藏弹出评论
+			showCommentList(){
+				this.showComment = !this.showComment
+			},
+
+			// 跳转主页
+			navigator() {
+				uni.navigateTo({
+					url: "../anthorInformation/anthorInformation"
+				})
+			},
+			
+			//计算评论去的最小高度
+			countCommentHeigh(){
+				//获取topic的高度、计算评论的最小高度
+				setTimeout(() => {
+					const result = this.dom.getComponentRect(this.$refs.topic, option => {
+						let height = option.size.height + getApp().globalData.statusBarHeight + 44
+						//计算评论区的最小高度（话题高度-导航栏高度-状态栏）
+						this.commentheight = this.equipment.screenHeight-height
+					})
+				}, 100);
+			},
+			
+		},
+		//监听用户使用物理返回键
+		onBackPress(options) {
+			//当返回true时才不会返回上一个页面
+			if(this.showComment){
+				//调用子组件的方法
+				this.$refs.popCommentList.hideCommentFuntion(() =>{
+					this.showCommentList();
+				})
+				return true;
+			}else{
+				return false;
+			}
+			
+		},
+		watch:{
+			// 侦听test变量的变化
+			test(newValues,oldValues){
+				if(newValues){
+					setTimeout(() =>{
+						this.successShowIcon = newValues
+					},100)
+				}else{
+					this.successShowIcon = newValues
+				}
+			}
+		},
+		onReady() {
+			//获取原生dom
+			this.dom = uni.requireNativePlugin('dom');
+			// this.showSuccessIcon();
+			this.countCommentHeigh();
+		},
+		components: {
+			statusBar,
+			comment: () => import ( '@/components/comment.nvue'),
+			popCommentList
+		},
+		computed: {
+			...mapState(['backgroundColor', 'color', 'inputStyle', 'user','equipment'])
+		}
+	}
+</script>
+
+<style scoped>
+	/* 关注的动画(这个会跟样式优先级冲突，可能不生效) */
+	.content .topic .userInfo .guanzhu .guanzhuKeyframe {
+		width: 150rpx;
+		height: 60rpx;
+		background-color: #ec6e69;
+	}
+
+	/* 关注的动画结束后的默认样式 */
+	.guanzhuKeyframeMo {
+		width: 150rpx;
+	}
+
+	/* 打勾的动画 */
+	.guanzhuTextKeyframe {
+		width: 50rpx;
+		height: 50rpx;
+	}
+	
+	.guanzhuTexgtKeyframeOpacity{
+		opacity: 1;
+	}
+
+	/* 打勾的默认动画 */
+	.guanzhuTextKeyframeMo {
+		width: 0rpx;
+		height: 0rpx;
+	}
+
+	.guanzhuTexgtKeyframeOpacityMo{
+		opacity: 0;
+	}
+
+	/* 整个内容 */
+	.content {
+		/* margin-bottom: 80rpx; */
+		/* background-color: red; */
+	}
+	
+	.content .topic,
+	.content .comment {
+		padding: 30rpx;
+	}
+
+	/* 头像信息区域 */
+	.content .topic .userInfo {
+		display: flex;
+		flex-direction: row;
+	}
+
+	/* 头像区域 */
+	.content .topic .userInfo .infoImage {}
+
+	.content .topic .userInfo .infoImage .image {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 80rpx;
+	}
+
+	/* 中间昵称区域 */
+	.content .topic .userInfo .nickNameBox {
+		margin-left: 25rpx;
+		margin-top: 10rpx;
+		flex: 1;
+	}
+
+	.content .topic .userInfo .nickNameBox .nickName {
+		font-size: 40rpx;
+	}
+
+	.content .topic .userInfo .nickNameBox .sendTime {
+		font-size: 25rpx;
+	}
+
+	/* 关注 */
+	.content .topic .userInfo .guanzhu {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 35rpx;
+	}
+
+	/* 关注外框 */
+	.content .topic .userInfo .guanzhu .guanzhuBox {
+		flex-direction: row;
+		height: 60rpx;
+		align-items: center;
+		justify-content: center;
+		/* width: 150rpx;/ */
+		border-radius: 60rpx;
+		transition-property: width, height, background-color;
+		transition-duration: 0.2s;
+		transition-delay: 0s;
+		transition-timing-function: linear;
+	}
+
+	/* 关注文字 */
+	.content .topic .userInfo .guanzhu .guanzhuBox .text {
+		text-align: center;
+		line-height: 55rpx;
+		color: #FFFFFF;
+		transition-property: width,height,opacity;
+		transition-duration: 0.2s;
+		transition-delay: 0s;
+		transition-timing-function: linear;
+	}
+
+	/* 话题内容文字区域 */
+	.content .topic .topicText .topicContentText {
+		margin-top: 20rpx;
+		font-size: 30rpx;
+		/* flex: 1; */
+	}
+
+	/* 图片区域 */
+	.content .topic .topicImage {
+		display: flex;
+		flex-direction: row;
+		/* 内容超出元素大小换行 */
+		flex-wrap: wrap;
+	}
+
+	.content .topic .topicImage .topicImages {
+		margin: 5rpx;
+		width: 210rpx;
+		height: 210rpx;
+		border-radius: 25rpx;
+	}
+
+	/* 评论区域 */
+	.content .comment{
+		/* flex: 1; */
+	}
+	.content .comment .commentTitle {
+		margin-bottom: 20rpx;
+	}
+	
+	/* 展开更多评论 */
+	.content .comment .commentList{
+		flex: 1;
+	}
+	.content .comment .commentList .moreCommetnBox{
+		flex-direction: row;
+		flex: 1;
+		/* margin-left: 100rpx; */
+		justify-content: center;
+		align-items: center;
+	}
+	.content .comment .commentList .moreCommetnBox .clickMoreComment{
+		color: #000000;
+		font-size: 35rpx;
+	}
+	
+</style>

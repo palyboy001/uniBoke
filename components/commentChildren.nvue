@@ -1,0 +1,123 @@
+<template>
+	<view class="container">
+		<view class="content">
+			<view class="infoImageBox">
+				<image class="image" src="/static/swipeImage/1.jpg" mode="aspectFill"></image>
+			</view>
+			<view class="nickNameBox">
+				<view class="nickName">
+					<text class="textHua nickNameText">{{comment.user.nickName}}</text>
+				</view>
+				<view class="commentConetent">
+					<text class="textHua topicText">{{comment.commentContent}}</text>
+				</view>
+				<view class="botom">
+					<text class="textHua sendTime">{{comment.sendTime}}</text>
+					<text class="textHua address">{{comment.user.address}}</text>
+					<text class="textHua call">回复</text>
+					<view class="zanBox">
+						<view class="clickZanBox">
+							<text class="number zan">{{comment.zan}}</text>
+							<text class="iconfont zan">&#xe651;</text>
+						</view>
+						<text class="iconfont cai">&#xe70e;</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"commentChildren",
+		props:['comment'],
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style scoped>
+	/* 主框架 */
+	.container{
+		display: flex;
+	}
+	/* 全部内容 */
+	.container .content{
+		display: flex;
+		flex-direction: row;
+		margin: 10rpx;
+	}
+	/* 头像区域 */
+	.container .content .infoImageBox .image{
+		width: 50rpx;
+		height: 50rpx;
+		border-radius: 80rpx;
+	}
+	
+	/* 中间昵称\内容区域 */
+	.container .content .nickNameBox {
+		margin-left: 25rpx;
+		margin-top: -5rpx;
+		flex: 1;
+	}
+	/* 昵称 */
+	.container .content .nickNameBox .nickName .nickNameText{
+		font-size: 30rpx;
+		color: #888888;
+	}
+	/* 内容区域 */
+	.content .nickNameBox .commentConetent .topicText{
+		font-size: 35rpx;
+	}
+	
+	.container .content .nickNameBox .botom{
+		align-items: center;
+	}
+	
+	/* 底部时间地址和点赞区域 */
+	.container .content .nickNameBox .botom,.content .nickNameBox .botom .zanBox,
+	.container .content .nickNameBox .botom .zanBox .clickZanBox{
+		display: flex;
+		flex-direction: row;
+	}
+	/* 字体大小 */
+	.container .content .nickNameBox .botom .sendTime,.address,.call{
+		color: #888888;
+		margin-right: 15rpx;
+		font-size: 25rpx;
+	}
+	
+	/* 点赞\踩 */
+	.container .content .nickNameBox .botom .zanBox{
+		margin-left: 50rpx;
+		display: flex;
+		justify-content: center;
+	}
+	/* 点赞区域 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox{
+		margin-right: 15rpx;
+		align-items: center;
+		/* min-width: 50rpx; */
+		width: 130rpx;
+		flex-direction: row-reverse;
+	}
+	/* 点赞的样式 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox .zan{
+		color: #888888;
+	}
+	/* 点赞的数据展示 */
+	.container .content .nickNameBox .botom .zanBox .clickZanBox .number{
+		margin-top: 8rpx;
+		margin-left: 5rpx;
+		font-size: 25rpx;
+	}
+	.container .content .nickNameBox .botom .zanBox .cai{
+		font-size: 50rpx;
+		color: #888888;
+	}
+
+</style>

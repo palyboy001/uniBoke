@@ -1,0 +1,414 @@
+<template>
+	<view class="container">
+		<!-- <statusBar></statusBar> -->
+		<!-- 导航栏 -->
+		<view class="navBox" :style="{'width':width+'px','top':navMarginHeight+'px'}">
+			<view class="backBox">
+				<view class="back firstBackgroundColor" @click="back()">
+					<text class="iconfont backText nav-font">&#xe662;</text>
+				</view>
+			</view>
+			<view class="visit firstBackgroundColor">
+				<text class="textHua visitText nav-font">访客:{{visitor}}</text>
+			</view>
+			<view class="edit firstBackgroundColor">
+				<text class="iconfont editText nav-font">&#xe606;</text>
+			</view>
+		</view>
+		<!-- 图片背景 -->
+		<view class="backgroundImage">
+			<image class="image" src="/static/swipeImage/2.jpg" mode="scaleToFill"></image>
+		</view>
+		<!-- 头像区域 -->
+		<view class="userInfoImage">
+			<view class="infoImageBox">
+				<image class="infoImage" src="/static/swipeImage/1.jpg" mode="aspectFill"></image>
+			</view>
+			<view class="information">
+				<view class="nickName">
+					<text class="text textHua">昵称</text>
+					<view class="grade">
+						<text class="gradeText textHua">Lv.1</text>
+					</view>
+				</view>
+				<view class="attribute">
+					<!-- 性别 -->
+					<view class="gender">
+						<text class="iconfont genderText">&#xe8e9;</text>
+					</view>
+					<view class="campusNumber">
+						<text class="number textHua">校园号：123456789</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 白板区域 -->
+		<view class="content">
+			<!-- 获赞、关注、粉丝区域 -->
+			<view class="favourBox">
+				<view class="zan">
+					<text class="favourNumber textHua">1.5w</text>
+					<text class="favourText textHua">获赞</text>
+				</view>
+				<view class="fans">
+					<text class="favourNumber textHua">35.5w</text>
+					<text class="favourText textHua">粉丝</text>
+				</view>
+				<view class="interest">
+					<text class="favourNumber textHua">1000</text>
+					<text class="favourText textHua">关注</text>
+				</view>
+			</view>
+			<!-- 个性签名 -->
+			<view class="sign">
+				<text ref="sign" :class="[showMoreText?'':'signText','textHua','signTextSize']">{{text}}</text>
+				<view class="zhankai">
+					<text class="moreText" @click="showMoreText=!showMoreText" v-if="size>=4">{{showMoreText?'收起':'展开'}}</text>
+				</view>
+			</view>
+			<!-- 私聊、关注 -->
+			<view class="chatAndInterestBox">
+				<view class="chat" @click="naviateToChat()">
+					<text class="chatText textHua">私聊</text>
+				</view>
+				<view class="interest">
+					<text class="interestText textHua">关注</text>
+				</view>
+			</view>
+			<!-- 话题内容 -->
+			<view class="topicContent">
+				<list>
+					<cell v-for="(item,index) in user" :key="index">
+						<topic 
+							:user="item"
+							@click.native="navigateToTopic()"
+						></topic>
+					</cell>
+				</list>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import statusBar from "@/components/statusBar.nvue"
+	import topic from "@/components/topic.nvue"
+	export default {
+		data() {
+			return {
+				visitor:9999,//访客
+				width:getApp().globalData.screenWidth,//整个屏幕的宽
+				navMarginHeight:getApp().globalData.statusBarHeight + 15,//导航栏上边距
+				text:"qw法山豆根第，三个十水水水水水水水水水，水方的，"+
+				"身上的\n撒旦第三方的萨芬犯得上发生发射点犯得上大师傅大师傅的撒发生打翻多少撒旦撒范德萨范德萨多少的萨芬的萨芬的萨芬的说法是大大飒飒大苏打萨达萨达萨达撒撒sddsnjhbvggtfrfffdssaqwetrtyuj",
+				showMoreText:false,//是否显示全部个性签名文字
+				size:0,//个性签名的高度
+				user:[
+					{
+						nickname:"腿毛小勇士",
+						sendTime:"18小时前",
+						userImage:"/static/swipeImage/1.jpg",
+						topic:{
+							text:"各种文案....",
+							image:[
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg",
+								// "/static/swipeImage/2.jpg"
+							],
+							zan:1024,
+							commentCount:1024
+						}
+					},
+					{
+						nickname:"腿毛小勇士",
+						sendTime:"18小时前",
+						userImage:"/static/swipeImage/1.jpg",
+						topic:{
+							text:"各种文案....",
+							image:[
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg",
+								"/static/swipeImage/2.jpg"
+							],
+							zan:1024,
+							commentCount:1024
+						}
+					},
+				]
+			}
+		},
+		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
+			// 跳转到详细话题
+			navigateToTopic(){
+				uni.navigateTo({
+					url:"../topicInformation/topicInformation"
+				})
+			},
+			// 跳转到私聊
+			naviateToChat(){
+				uni.navigateTo({
+					url:"../chat/chat"
+				})
+			}
+		
+		},
+		onReady() {
+			console.log(this.text.length)
+			//获取个性签名的高度是否超过四行
+		    // #ifdef APP-PLUS
+			 const dom = weex.requireModule('dom')
+		    setTimeout(()=> {
+		        const result = dom.getComponentRect(this.$refs.sign, option => {
+		    		// 向上取整
+					// console.log(option)
+					// console.log(option.size.height/35)
+					this.size = Math.ceil(option.size.height/35)
+		    	})
+		     }, 100);
+		    // #endif
+		},
+		mounted() {
+			
+		},
+		components:{
+			statusBar,
+			topic
+		}
+	}
+</script>
+
+<style scoped>
+	/* 主框架 */
+	.container{
+		display: flex;
+	}
+	
+	/* 导航栏 */
+	.container .navBox{
+		position: fixed;
+		flex-direction: row;
+		/* margin-top: 25rpx; */
+		padding-left: 30rpx;
+		padding-right: 30rpx;
+	}
+	/* 返回 */
+	.container .navBox .backBox{
+		flex: 1;
+	}
+	.container .navBox .backBox .back{
+		height: 50rpx;
+		width: 50rpx;
+		justify-content: center;
+		border-radius: 50rpx;
+	}
+	.container .navBox .back .backText{
+		font-size: 55rpx;
+		margin-left: -5rpx;
+	}
+	/* 访客 */
+	.container .navBox .visit{
+		margin-right: 50rpx;
+		width: 150rpx;
+		height: 50rpx;
+		justify-content: center;
+		border-radius: 50rpx;
+		background-color: #4C8045;
+	}
+	.container .navBox .visit .visitText{
+		font-size: 30rpx;
+		text-align: center;
+	}
+	/* 编辑 */
+	.container .navBox .edit{
+		width: 50rpx;
+		height: 50rpx;
+		border-radius: 50rpx;
+		justify-content: center;
+		background-color: #4C8045;
+	}
+	.container .navBox .edit .editText{
+		font-size: 34rpx;
+		margin-left: -5rpx;
+		text-align: center;
+	}
+	/* 背景图 */
+	.container .backgroundImage .image{
+		/* margin-top: -75rpx; */
+		min-height: 420rpx;
+		max-height: 520rpx;
+	}
+	/* 头像区域 */
+	.container .userInfoImage{
+		flex-direction: row;
+		padding-left: 50rpx;
+		margin-top: -160rpx;
+		padding-bottom: 20rpx;
+		/* background-color: #4C8045; */
+		background-image: linear-gradient(to bottom,rgba(255,255,255,0.01), rgba(0,0,0,0.8));
+	}
+	/* 头像 */
+	.container .userInfoImage .infoImage{
+		width: 120rpx;
+		height: 120rpx;
+		border-color: #FFFFFF;
+		border-width: 5rpx;
+		border-radius: 150rpx;
+	}
+	/* 中间区域信息 */
+	.container .userInfoImage .information{
+		margin-left: 40rpx;
+		margin-top: 10rpx;
+	}
+	/* 昵称一行 */
+	.container .userInfoImage .information .nickName{
+		flex-direction: row;
+		align-items: center;
+	}
+	/* 昵称文字 */
+	.container .userInfoImage .information .nickName .text{
+		color: #FFFFFF;
+	}
+	/* 等级方框 */
+	.container .userInfoImage .information .nickName .grade{
+		background-color: #E8E210;
+		border-radius: 10rpx;
+		height: 30rpx;
+		width: 60rpx;
+		margin-left: 10rpx;
+	}
+	/* 等级文字 */
+	.container .userInfoImage .information .nickName .grade .gradeText{
+		font-size: 25rpx;
+		text-align: center;
+	}
+	/* 个性签名、性别 */
+	.container .userInfoImage .information .attribute{
+		margin-top: 10rpx;
+		flex-direction: row;
+	}
+	/* 性别框 */
+	.container .userInfoImage .information .attribute .gender{
+		width: 32rpx;
+		height: 32rpx;
+		background-color: #FFFFFF;
+		border-radius: 32rpx;
+	}
+	/* 性别文字 */
+	.container .userInfoImage .information .attribute .gender .genderText{
+		/* color: #0091FF; */
+		color: #D4237A;
+	}
+	/* 校园号 */
+	.container .userInfoImage .information .attribute .campusNumber{
+		margin-left: 20rpx;
+		flex: 1;
+	}
+	.container .userInfoImage .information .attribute .campusNumber .number{
+		color: #FFFFFF;
+		font-size: 25rpx;
+		font-weight: bold;
+	}
+	/* 白板区域 */
+	.container .content{
+		flex: 1;
+		padding-left: 30rpx;
+		padding-right: 30rpx;
+		border-top-left-radius: 20rpx;
+		border-top-right-radius: 20rpx;
+		background-color: #FFFFFF;
+	}
+	.container .content .favourBox{
+		margin-top: 15rpx;
+	}
+	.container .content .favourBox,
+	.container .content .favourBox .zan,
+	.container .content .favourBox .fans,
+	.container .content .favourBox .interest{
+		flex-direction: row;
+	}
+	
+	.container .content .favourBox .fans,
+	.container .content .favourBox .interest{
+		margin-left: 50rpx;
+	}
+	/* 数字样式 */
+	.container .content .favourBox .favourNumber{
+		font-size: 35rpx;
+	}
+	/* 文字样式 */
+	.container .content .favourBox .favourText{
+		font-size: 25rpx;
+		margin-top: 10rpx;
+		margin-left: 5rpx;
+	}
+	/* 个性签名 */
+	.container .content .sign{
+		margin-top: 30rpx;
+		/* flex-direction: row; */
+	}
+	.container .content .sign .signTextSize{
+		font-size: 28rpx;
+		line-height: 38rpx;
+		/* margin-right: -4rpx; */
+	}
+	.container .content .sign .signText{
+		verflow: hidden;
+		word-break: break-all; /*  break-all(允许在单词内换行。) */
+		text-overflow: ellipsis; /* 超出部分省略号 */
+		-webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+		-webkit-line-clamp: 4; /** 显示的行数 **/
+		lines:4;/* //NVUE下要用这个属性，来让文字超出固定行数隐藏变省略号 */
+	}
+	/* 展开文字 */
+	.container .content .sign .zhankai{
+		flex-direction: row-reverse;
+	}
+	.container .content .sign .zhankai .moreText{
+		font-size: 28rpx;
+	}
+	/* 关注私聊 */
+	.container .content .chatAndInterestBox{
+		flex-direction: row;
+		justify-content: center;
+		margin-top: 30rpx;
+		margin-bottom: 50rpx;
+	}
+	.container .content .chatAndInterestBox .chat,
+	.container .content .chatAndInterestBox .interest{
+		justify-content: center;
+		width: 300rpx;
+		height: 60rpx;
+		border-radius: 10rpx;
+		margin-left: 30rpx;
+		background-color: #4C8045;
+	}
+	.container .content .chatAndInterestBox .chat .chatText,
+	.container .content .chatAndInterestBox .interest .interestText{
+		font-size: 30rpx;
+		color: #FFFFFF;
+		text-align: center;
+	}
+	.container .content .topicContent{
+		border-top-color: #FFFFFF;
+		border-top-width: 2rpx;
+		margin-left: -30rpx;
+		margin-right: -30rpx;
+	}
+</style>

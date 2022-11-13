@@ -1,0 +1,85 @@
+<template>
+	<view class="content" :style="contentStyle">
+		<view class="box" :style="boxStyle">
+			<view class="text" @click="navigate()">
+				<image src="../static/logo.png"></image>
+				<text>主页</text>
+			</view>
+			<view class="text">
+				<image src="../static/logo.png"></image>
+				<text>主页</text>
+			</view>
+			<view class="text">
+				<image src="../static/logo.png"></image>
+				<text>主页</text>
+			</view>
+			<view class="text">
+				<image src="../static/logo.png"></image>
+				<text>主页</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props:['data'],
+		data() {
+			return {
+				data:{
+
+				},
+				boxStyle:{
+					width:getApp().globalData.screenWidth + "px",
+				},
+				contentStyle:{
+					bottom:0-this.countNavHeight() + "px"
+				},
+				
+			}
+		},
+		methods: {
+			countNavHeight(){
+				return getApp().globalData.screenHeight - 50
+			},
+			navigate(){
+				console.log(1111)
+				uni.navigateTo({
+					url:"/pages/user/user"
+				})
+			}
+			
+		},
+		created() {
+			console.log(getApp().globalData.screenHeight)
+		}
+	}
+</script>
+
+<style scoped>
+	.content{
+		height:100rpx;
+		background-color:red;
+	}
+	.content .box{
+		display:flex;
+		flex-direction: row;
+		padding: 10rpx;
+		background-color: white;
+	}
+	.content .box .text{
+		flex: 1;
+		text-align: center;
+		height: 100rpx;
+		/* line-height: 50px; */
+	}
+	.content .box .text text{
+		font-size: 28rpx;
+	}
+	.content .box .text image{
+		display: inline-block;
+		margin: 0 auto;
+		width: 50rpx;
+		height: 50rpx;
+	}
+</style>
