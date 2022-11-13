@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间要跟接口的命名空间以致，文件路径也需要一样 -->
+<mapper namespace="com.uniBoke.mapper.UserMapper">
+    <!--  获取用户ID  -->
+    <select id="getUserID" resultType="string">
+        select userID from user where userID = #{userID}
+    </select>
+
+    <!--  获取用户手机  -->
+    <select id="getUserPhone" resultType="string">
+        select phoneNumber from user where phoneNumber = #{phone}
+    </select>
+
+    <!--  获取用户账号  -->
+    <select id="getUserAccount" resultType="string">
+        select userAcciunt from user where userAcciunt = #{userAcciunt}
+    </select>
+
+    <!--  根据手机号或者用户id获取用户信息  -->
+    <select id="getUserInfo" resultType="User">
+        select u.userID,u.userAccount,u.phoneNumber,u.delFlag,u.createTime,
+        info.nikeName,info.infoImage,info.sex,info.cover,info.birthday,info.address,info.ip,
+        info.education,info.signature,info.integral,info.lastLoginTime,info.`status`
+        from user u join userinformtion info on u.userID = info.userID
+        where
+        <if test="phone != null and phone != ''">
+            u.phoneNumber = #{phone}
+        </if>
+        <if test="userID != ''">
+            u.userID = #{userID}
+        </if>
+
+    </select>
+
+    <!--  用户登录  -->
+    <select id="login" resultType="User" parameterType="string">
+        select userID,phoneNumber,`password` from user where phoneNumber = #{phone} and `password` = #{password}
+    </select>
+
+    <!--  用户注册  -->
+    <insert id="register" parameterType="User">
+        insert into user (userID,userAccount,phoneNumber,`password`,delFlag,createTime)
+        values(#{userID},#{userAccount},#{phoneNumber},#{password},#{delFlag},#{createTime})
+    </insert>
+
+    <!--  初始化用户基本信息  -->
+    <insert id="registerInformation" parameterType="User">
+        insert into userinformtion (userID) value (#{userID})
+    </insert>
+
+    <!--  用户信息更改  -->
+    <update id="userInfoChange" parameterType="User">
+        update userinformtion
+        set nikeName = #{nikeName},
+			sex = #{sex},
+			cover = #{cover},
+			birthday = #{birthday},
+			address = #{address},
+			ip = #{ip},
+			education = #{education},
+			signature = #{signature},
+			integral = #{integral},
+			email = #{email},
+			`level` = #{level},
+			VIPLevel = #{VIPLevel},
+			infoImage = #{infoImage}
+        where userID = #{userID}
+    </update>
+</mapper>
